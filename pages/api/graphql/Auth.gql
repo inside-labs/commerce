@@ -1,0 +1,16 @@
+query AuthPasswordSignUp($username: String!, $password: String!) {
+    authSignUp(password: $password, username: $username) {
+        userId
+        confirmed
+    }
+}
+
+query AuthPasswordLogin($username: String!, $password: String!) {
+    authPasswordLogin(password: $password, username: $username) {
+        idToken
+        refreshToken
+        expiresIn
+        tokenType
+        accessToken
+    }
+}

@@ -1,0 +1,161 @@
+query ShopGetCart($cartId: String!) {
+    shopGetCart(cartId: $cartId) {
+        ...ShopCart
+    }
+}
+
+mutation ShopCreateCartWithItems($items: [ShopCartItemInput!]!) {
+    shopCreateCartWithItems(items: $items) {
+        ...ShopCart
+    }
+}
+
+mutation ShopAddItemsToCart($items: [ShopCartItemInput!]!, $cartId: String!) {
+    shopAddItemsToCart(items: $items, cartId: $cartId) {
+        ...ShopCart
+    }
+}
+
+mutation ShopUpdateCartItemQuantity($cartId: String!, $itemId: String!, $quantity: Int!) {
+    shopUpdateCartItemQuantity(cartId: $cartId, itemId: $itemId, quantity: $quantity) {
+        ...ShopCart
+    }
+}
+
+mutation ShopRemoveItemFromCart($itemId: String!, $cartId: String!) {
+    shopRemoveItemFromCart(itemId: $itemId, cartId: $cartId) {
+        ...ShopCart
+    }
+}
+
+mutation ShopClearCart($cartId: String!) {
+    shopClearAllCartItems(cartId: $cartId) {
+        ...ShopCart
+    }
+}
+
+mutation ShopApplyCouponToCart($couponCode: String!, $cartId: String!) {
+    shopApplyCouponToCart(couponCode: $couponCode, cartId: $cartId) {
+        ...ShopCart
+    }
+}
+
+mutation ShopRemoveCouponFromCart($cartId: String!) {
+    shopRemoveCouponFromCart(cartId: $cartId) {
+        ...ShopCart
+    }
+}
+
+mutation ShopApplyGiftCardToCart($cartId: String!, $giftcardCode: String!, $amount: Float!) {
+    shopApplyGiftCardToCart(giftcardCode: $giftcardCode, amount: $amount, cartId: $cartId) {
+        ...ShopCart
+    }
+}
+
+mutation ShopRemoveGiftcardFromCart($cartId: String!, $giftcardId: String!) {
+    shopRemoveGiftcardFromCart(cartId: $cartId, giftcardId: $giftcardId) {
+        ...ShopCart
+    }
+}
+
+mutation ShopApplyAccountCreditToCart($cartId: String!, $amount: Float!) {
+    shopApplyAccountCreditToCart(cartId: $cartId, amount: $amount) {
+        ...ShopCart
+    }
+}
+
+mutation ShopRemoveAccountCreditFromCart($cartId: String!) {
+    shopRemoveAccountCreditFromCart(cartId: $cartId) {
+        ...ShopCart
+    }
+}
+
+mutation ShopApplyPromotionToCart($cartId: String!, $promotionId: String!) {
+    shopApplyPromotionToCart(promotionId: $promotionId, cartId: $cartId) {
+        ...ShopCart
+    }
+}
+
+mutation ShopRemovePromotionFromCart($cartId: String!, $promotionId: String!) {
+    shopRemovePromotionFromCart(promotionId: $promotionId, cartId: $cartId) {
+        ...ShopCart
+    }
+}
+
+mutation ShopCheckout($cartId: String!) {
+    shopCheckout(cartId: $cartId) {
+        orderNumber
+        message
+    }
+}
+
+fragment ShopCart on ShopCart {
+    id
+    items {
+        id
+        name
+        description
+        options {
+            price
+            value
+            id
+            name
+        }
+        quantity
+        productId
+        variantId
+        originalPrice
+        price
+        discount
+        totalPrice
+        totalDiscount
+    }
+    shipping {
+        name
+        first_name
+        last_name
+        address1
+        address2
+        city
+        state
+        zip
+        country
+        phone
+        price
+        service
+        service_name
+    }
+    giftcards {
+        id
+        codeLast4
+        amount
+        balance
+    }
+    coupon {
+        id
+        name
+        code
+        amount
+    }
+    promotions {
+        amount
+        description
+        name
+        id
+    }
+    taxes {
+        amount
+        rate
+        name
+        id
+    }
+    paymentMethod {
+        expYear
+        expMonth
+        brand
+        last4
+        token
+    }
+    subTotal
+    grandTotal
+}

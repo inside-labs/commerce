@@ -1,0 +1,53 @@
+schema:
+  - 'http://localhost:4000/graphql'
+documents:
+  - 'pages/api/graphql/**/*.gql'
+hooks:
+  afterAllFileWrite:
+    - 'prettier --write'
+
+generates:
+  # Generates a full copy of the remote schema
+  schema.graphql:
+    plugins:
+      - schema-ast
+
+  # Generates fragment metadata needed by apollo cache
+  pages/api/omni/fragmentMetadata.json:
+    plugins:
+      - fragment-matcher
+
+  # Generates query and mutation documents
+  pages/api/omni/operations.ts:
+    plugins:
+      - typescript-document-nodes
+
+  # Generates query and mutation types
+  pages/api/omni/types.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+    config:
+      # Use interfaces where possible, instead of type aliases
+      declarationKind: 'interface'
+
+      # Generate nullable fields as Maybe<T> (instead of { field?: Maybe<T> })
+      avoidOptionals: true
+
+      # Use string literal types instead of enums, for compatibility with omni types
+      enumsAsTypes: true
+
+      # __typename is always fetched, so don’t mark it as optional in generated types
+      nonOptionalTypename: true
+
+      # Inline field selections in generated types, instead of using Pick<>
+      preResolveTypes: true
+
+      # Give scalars definite types, rather than 'any'
+      scalars:
+        Date: 'string'
+        DateTime: 'string'
+        IntlString: 'string'
+        LocalTime: 'string'
+        Time: 'string'
+        LanguageCode: "'en' | 'de'"

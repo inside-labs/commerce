@@ -1,0 +1,35 @@
+query ShopGetRootCategories {
+    shopGetRootCategories {
+        id
+        name
+        description
+        images {
+            id
+            url
+            width
+            height
+        }
+        slug
+        sort
+        parentId
+        rootId
+    }
+}
+
+query ShopGetCategoriesWithParentyCategory($parentCategoryId: String!) {
+    shopGetCategoriesWithParentCategory(parentCategoryId: $parentCategoryId) {
+        id
+        name
+        description
+        images {
+            id
+            url
+            width
+            height
+        }
+        slug
+        sort
+        parentId
+        rootId
+    }
+}

@@ -1,0 +1,11 @@
+query UserGetDetails {
+    userGetDetails {
+        firstName
+        lastName
+        avatarUrl
+        displayName
+        languageCode
+        email
+        phoneNumber
+    }
+}

@@ -1,0 +1,662 @@
+type Query {
+    demo(id: ID!): Demo!
+    favoriteGetFavorites: [String!]!
+    friendshipGetFriends: [Friendship!]!
+    keycardGetKeycard: UserGetKeycardResponse!
+    partyMemberGetMembers: [PartyMember!]!
+    selfDeclarationGetDeclarations: [SelfDeclaration!]!
+    shopGetRootCategories: [ShopCategory!]!
+    shopGetCategoriesWithParentCategory(parentCategoryId: String!): [ShopCategory!]!
+    shopGetProducts(input: ShopGetProductsInput!): ShopGetProductsResponse!
+    shopGetProduct(productId: String!): ShopProduct!
+    shopGetProductBySlug(slug: String!): ShopProduct!
+    shopGetVariantsForProductOptions(items: [ShopProductOptionsInput!]!): [ShopProductVariant!]!
+    shopGetProductCalendarPricesAndStock(input: ShopLoadCalendarPricesAndStockInput): [ShopDatePriceAndStock!]!
+    shopGetCart(cartId: String!): ShopCart!
+    shopGetCustomerAccountCouponsValidForCart(cartId: String!): [ShopCoupon!]!
+    shopGetUserCoupons: [ShopCoupon!]!
+    shopGetUserSavedCreditCards: [ShopCreditCard!]!
+    userGetDetails: User!
+    authSignUp(username: String!, password: String): SignUpConfirmation!
+    authPasswordLogin(username: String!, password: String!): Credentials!
+    authPasswordlessLogin(username: String!): PasswordlessAuthChallenge!
+    authAnswerPasswordlessChallenge(username: String!, session: String!, answer: String!): PasswordlessChallengeResult!
+}
+
+type Demo {
+    id: ID!
+    some: String!
+    another: String
+}
+
+type Friendship {
+    id: String!
+    userId: String!
+    createdAt: Datetime!
+    status: FriendshipStatus!
+    requester: Boolean!
+}
+
+scalar Datetime
+
+enum FriendshipStatus {
+    PENDING
+    ACCEPTED
+}
+
+type UserGetKeycardResponse {
+    keycard: Keycard
+}
+
+type Keycard {
+    id: String!
+    keycardNumber: String!
+    keycardType: KeycardType!
+    zipcode: String
+}
+
+enum KeycardType {
+    AXESS
+    SKIDATA
+    SWISS_PASS
+    UNKNOWN
+}
+
+type PartyMember {
+    id: String!
+    firstName: String!
+    lastName: String!
+    dateOfBirth: String
+    keycard: Keycard
+}
+
+type SelfDeclaration {
+    declarationId: String!
+}
+
+type ShopCategory {
+    id: String!
+    name: String!
+    description: String
+    images: [ShopImage!]!
+    slug: String!
+    sort: Int
+    parentId: String
+    rootId: String
+}
+
+type ShopImage {
+    id: String!
+    url: String!
+    width: Int
+    height: Int
+}
+
+input ShopGetProductsInput {
+    searchTerm: String
+    categoryId: String
+    page: Int!
+    limit: Int!
+}
+
+type ShopGetProductsResponse {
+    products: [ShopProductSummary!]!
+    count: Int!
+    page: Int!
+}
+
+type ShopProductSummary implements ShopProductBase {
+    id: String!
+    type: ShopProductType!
+    name: String!
+    slug: String!
+    description: String
+    category: String
+    images: [ShopImage!]!
+    options: [ShopProductOption!]!
+    variantOptions: [ShopProductVariantOption!]!
+    tags: [String!]!
+    attributes: [ShopProductAttribute!]!
+    price: Float
+    salePrice: Float
+    stock: Int
+    onSale: Boolean
+    hidden: Boolean
+}
+
+interface ShopProductBase {
+    id: String!
+    type: ShopProductType!
+    name: String!
+    slug: String!
+    description: String
+    category: String
+    images: [ShopImage!]!
+    options: [ShopProductOption!]!
+    variantOptions: [ShopProductVariantOption!]!
+    tags: [String!]!
+    attributes: [ShopProductAttribute!]!
+    price: Float
+    salePrice: Float
+    stock: Int
+    onSale: Boolean
+    hidden: Boolean
+}
+
+enum ShopProductType {
+    standard
+    bundle
+    giftcard
+    variable
+    subscription
+    virtual
+}
+
+type ShopProductOption {
+    id: String!
+    name: String!
+    description: String
+    values: [ShopProductOptionValue!]
+    required: Boolean
+    placeholder: String
+    inputType: ShopProductOptionInputType
+    price: Float
+    parentId: String
+    parentValueIds: [String!]
+}
+
+type ShopProductOptionValue {
+    id: String!
+    name: String!
+    description: String
+    price: Float
+}
+
+enum ShopProductOptionInputType {
+    select
+    toggle
+    short_text
+    long_text
+}
+
+type ShopProductVariantOption {
+    id: String!
+    name: String!
+    values: [ShopProductVariantOptionValue!]
+}
+
+type ShopProductVariantOptionValue {
+    id: String!
+    name: String!
+}
+
+union ShopProductAttribute =
+      ShopProductAttributeStringValue
+    | ShopProductAttributeBooleanValue
+    | ShopProductAttributeIntValue
+    | ShopProductAttributeFloatValue
+    | ShopProductAttributeImageValue
+    | ShopProductAttributeFileValue
+    | ShopProductAttributeStringArrayValue
+    | ShopProductAttributeImageArrayValue
+    | ShopProductAttributeFileArrayValue
+
+type ShopProductAttributeStringValue implements ShopProductAttributeBase {
+    name: String!
+    value: String!
+}
+
+interface ShopProductAttributeBase {
+    name: String!
+}
+
+type ShopProductAttributeBooleanValue implements ShopProductAttributeBase {
+    name: String!
+    value: Boolean!
+}
+
+type ShopProductAttributeIntValue implements ShopProductAttributeBase {
+    name: String!
+    value: Int!
+}
+
+type ShopProductAttributeFloatValue implements ShopProductAttributeBase {
+    name: String!
+    value: Float!
+}
+
+type ShopProductAttributeImageValue implements ShopProductAttributeBase {
+    name: String!
+    value: ShopImage!
+}
+
+type ShopProductAttributeFileValue implements ShopProductAttributeBase {
+    name: String!
+    value: ShopFile!
+}
+
+type ShopFile {
+    id: String!
+    filename: String!
+    contentType: String!
+    url: String!
+}
+
+type ShopProductAttributeStringArrayValue implements ShopProductAttributeBase {
+    name: String!
+    value: [String!]!
+}
+
+type ShopProductAttributeImageArrayValue implements ShopProductAttributeBase {
+    name: String!
+    value: [ShopImage!]!
+}
+
+type ShopProductAttributeFileArrayValue implements ShopProductAttributeBase {
+    name: String!
+    value: [ShopFile!]!
+}
+
+type ShopProduct implements ShopProductBase {
+    id: String!
+    type: ShopProductType!
+    name: String!
+    slug: String!
+    description: String
+    category: String
+    images: [ShopImage!]!
+    options: [ShopProductOption!]!
+    variantOptions: [ShopProductVariantOption!]!
+    upsells: [ShopProductUpsell!]!
+    crossSells: [ShopProductCrossSell!]!
+    bundleItems: [ShopProductBundleItem!]
+    tags: [String!]!
+    attributes: [ShopProductAttribute!]!
+    price: Float
+    salePrice: Float
+    stock: Int
+    onSale: Boolean
+    hidden: Boolean
+}
+
+type ShopProductUpsell {
+    product: ShopProductUpsellProduct!
+}
+
+type ShopProductUpsellProduct implements ShopProductBase {
+    id: String!
+    type: ShopProductType!
+    name: String!
+    slug: String!
+    description: String
+    category: String
+    images: [ShopImage!]!
+    options: [ShopProductOption!]!
+    variantOptions: [ShopProductVariantOption!]!
+    crossSells: [ShopProductCrossSell!]!
+    tags: [String!]!
+    attributes: [ShopProductAttribute!]!
+    price: Float
+    salePrice: Float
+    stock: Int
+    onSale: Boolean
+    hidden: Boolean
+}
+
+type ShopProductCrossSell {
+    product: ShopProductCrossSellProduct
+    discount_type: ShopProductDiscountType!
+    discount_amount: Float
+    discount_percent: Float
+}
+
+type ShopProductCrossSellProduct implements ShopProductBase {
+    id: String!
+    type: ShopProductType!
+    name: String!
+    slug: String!
+    description: String
+    category: String
+    images: [ShopImage!]!
+    options: [ShopProductOption!]!
+    variantOptions: [ShopProductVariantOption!]!
+    tags: [String!]!
+    attributes: [ShopProductAttribute!]!
+    price: Float
+    salePrice: Float
+    stock: Int
+    onSale: Boolean
+    hidden: Boolean
+}
+
+enum ShopProductDiscountType {
+    fixed
+    percent
+}
+
+type ShopProductBundleItem {
+    id: String!
+    quantity: Int!
+    productId: String!
+    variantId: String
+    product: ShopProductBundleItemProduct!
+}
+
+type ShopProductBundleItemProduct implements ShopProductBase {
+    id: String!
+    type: ShopProductType!
+    name: String!
+    slug: String!
+    description: String
+    category: String
+    images: [ShopImage!]!
+    options: [ShopProductOption!]!
+    variantOptions: [ShopProductVariantOption!]!
+    tags: [String!]!
+    attributes: [ShopProductAttribute!]!
+    price: Float
+    salePrice: Float
+    stock: Int
+    onSale: Boolean
+    hidden: Boolean
+}
+
+input ShopProductOptionsInput {
+    productId: String!
+    options: [ShopProductOptionInput!]!
+}
+
+input ShopProductOptionInput {
+    id: String!
+    valueId: String!
+    variant: Boolean!
+}
+
+type ShopProductVariant {
+    id: String!
+    name: String!
+    productId: String!
+    variantId: String!
+    price: Float!
+    salePrice: Float
+    onSale: Boolean
+    stock: Int
+    options: [ShopProductVariantOptionDefintion!]
+}
+
+type ShopProductVariantOptionDefintion {
+    id: String!
+    valueId: String!
+    variant: Boolean
+}
+
+input ShopLoadCalendarPricesAndStockInput {
+    productId: String!
+    options: [ShopLoadCalendarPricesAndStockOptionInput!]
+}
+
+input ShopLoadCalendarPricesAndStockOptionInput {
+    id: String!
+    value: String!
+}
+
+type ShopDatePriceAndStock {
+    date: String!
+    price: Float!
+    stock: Int
+    active: Boolean
+}
+
+type ShopCart {
+    id: String!
+    items: [ShopCartItem!]!
+    shipping: ShopOfferShipping
+    giftcards: [ShopCartGiftcardItem!]!
+    coupon: ShopCartCoupon
+    promotions: [ShopPromotion]
+    taxes: [ShopOfferTax]!
+    paymentMethod: ShopCartPaymentMethod
+    subTotal: Float
+    grandTotal: Float
+}
+
+type ShopCartItem {
+    id: String!
+    name: String!
+    description: String
+    options: [ShopCartItemOption!]
+    quantity: Int!
+    productId: String!
+    variantId: String
+    originalPrice: Float!
+    price: Float!
+    discount: Float!
+    totalPrice: Float!
+    totalDiscount: Float!
+}
+
+type ShopCartItemOption {
+    id: String!
+    name: String!
+    value: String!
+    price: Float
+}
+
+interface ShopOfferShipping {
+    name: String
+    first_name: String
+    last_name: String
+    address1: String
+    address2: String
+    city: String
+    state: String
+    zip: Int
+    country: String
+    phone: String
+    price: Float
+    service: String
+    service_name: String
+}
+
+interface ShopCartGiftcardItem {
+    id: String!
+    codeLast4: String!
+    amount: Float!
+    balance: Float!
+}
+
+type ShopCartCoupon {
+    id: String!
+    name: String!
+    code: String!
+    amount: Float!
+}
+
+type ShopPromotion {
+    id: String!
+    name: String!
+    description: String
+    amount: Float!
+}
+
+interface ShopOfferTax {
+    id: String!
+    name: String!
+    rate: Float!
+    amount: Float!
+}
+
+type ShopCartPaymentMethod {
+    token: String!
+    last4: String
+    brand: ShopCardBrand
+    expMonth: Int
+    expYear: Int
+}
+
+enum ShopCardBrand {
+    AMERICAN_EXPRESS
+    MASTER_CARD
+    VISA
+    UNKNOWN
+}
+
+type ShopCoupon {
+    id: String!
+    code: String!
+    name: String!
+    description: String
+}
+
+type ShopCreditCard {
+    id: String!
+    expMonth: Int!
+    expYear: Int!
+    last4: String!
+    brand: ShopCardBrand!
+    expired: Boolean!
+    default: Boolean
+}
+
+type User {
+    id: ID!
+    email: String!
+    firstName: String
+    lastName: String
+    phoneNumber: String
+    avatarUrl: String
+    displayName: String
+    languageCode: String
+}
+
+type SignUpConfirmation {
+    userId: String!
+    confirmed: Boolean!
+}
+
+type Credentials {
+    accessToken: String!
+    expiresIn: Int!
+    tokenType: String!
+    refreshToken: String!
+    idToken: String!
+}
+
+type PasswordlessAuthChallenge {
+    session: String!
+}
+
+union PasswordlessChallengeResult = Credentials | PasswordlessAuthChallenge
+
+type Mutation {
+    demoCreate(input: CreateDemoInput!): Demo
+    favoriteAddFavorite(itemId: String!): [String!]!
+    favoriteRemoveFavorite(itemId: String!): [String!]!
+    friendshipSendFriendRequest(userId: String!): [Friendship!]!
+    friendshipCancelFriendRequest(requestId: String!): [Friendship!]!
+    friendshipAcceptFriendRequest(requestId: String!): [Friendship!]!
+    friendshipRejectFriendRequest(requestId: String!): [Friendship!]!
+    friendshipRemoveFriend(requestId: String!): [Friendship!]!
+    keycardSetKeycard(input: KeycardInput!): Keycard!
+    keycardRemoveKeycard: Boolean!
+    partyMemberAddMember(input: PartyMemberInput!): [PartyMember!]!
+    partyMemberUpdateMember(partyMemberId: String!, input: PartyMemberInput!): [PartyMember!]!
+    partyMemberRemoveMember(partyMemberId: String!): [PartyMember!]!
+    selfDeclarationAddDeclaration(declarationId: String!): [SelfDeclaration!]!
+    selfDeclarationRemoveDeclaration(declarationId: String!): [SelfDeclaration!]!
+    shopCreateCartWithItems(items: [ShopCartItemInput!]!): ShopCart!
+    shopAddItemsToCart(cartId: String!, items: [ShopCartItemInput!]!): ShopCart!
+    shopUpdateCartItemQuantity(cartId: String!, itemId: String!, quantity: Int!): ShopCart!
+    shopRemoveItemFromCart(cartId: String!, itemId: String!): ShopCart!
+    shopClearAllCartItems(cartId: String!): ShopCart!
+    shopApplyCouponToCart(cartId: String!, couponCode: String!): ShopCart!
+    shopRemoveCouponFromCart(cartId: String!): ShopCart!
+    shopApplyGiftCardToCart(cartId: String!, giftcardCode: String!, amount: Float): ShopCart!
+    shopRemoveGiftcardFromCart(cartId: String!, giftcardId: String!): ShopCart!
+    shopApplyAccountCreditToCart(cartId: String!, amount: Float!): ShopCart!
+    shopRemoveAccountCreditFromCart(cartId: String!): ShopCart!
+    shopUseTokenizedCardForCartPayment(cartId: String!, creditCardToken: String!): ShopCart!
+    shopUseSavedPaymentMethodForCartPayment(cartId: String!, accountCardId: String!): ShopCart!
+    shopApplyPromotionToCart(cartId: String!, promotionId: String!): ShopCart!
+    shopRemovePromotionFromCart(cartId: String!, promotionId: String!): ShopCart!
+    shopAddCreditCardToCustomerAccount(input: ShopAddCreditCardToCustomerAccountInput!): [ShopCreditCard!]!
+    shopSetCustomerAccountDefaultCreditCard(cardId: String!): [ShopCreditCard!]!
+    shopRemoveCreditCardFromCustomerAccount(cardId: String!): [ShopCreditCard!]!
+    shopCheckout(cartId: String!): ShopCheckoutResponse!
+    userCreate(input: UserCreateInput!): User!
+    userUpdateDetails(input: UserSetDetailsInput!): User!
+    userUpdateAvatar(data: String!): User!
+    userUpdateLanguage(languageCode: String!): User!
+    userSetProfilePublic: User!
+    userSetProfilePrivate: User!
+}
+
+input CreateDemoInput {
+    some: String!
+    another: String
+}
+
+input KeycardInput {
+    keycardNumber: String!
+    keycardType: KeycardType!
+    zipcode: String
+}
+
+input PartyMemberInput {
+    firstName: String!
+    lastName: String!
+    dateOfBirth: String
+    keycard: KeycardInput
+}
+
+input ShopCartItemInput {
+    productId: String!
+    variantId: String
+    options: [ShopCartItemOptionInput!]
+    quantity: Int!
+    crossSellItems: [ShopCartItemCrossSellInput!]
+}
+
+input ShopCartItemOptionInput {
+    id: String!
+    valueId: String!
+}
+
+input ShopCartItemCrossSellInput {
+    productId: String!
+    variantId: String
+    options: [ShopCartItemOptionInput!]
+    quantity: Int!
+}
+
+input ShopAddCreditCardToCustomerAccountInput {
+    token: String!
+    expMonth: Int!
+    expYear: Int!
+    last4: String!
+    brand: ShopCardBrand!
+}
+
+type ShopCheckoutResponse {
+    orderNumber: String!
+    message: String!
+}
+
+input UserCreateInput {
+    email: String!
+}
+
+input UserSetDetailsInput {
+    firstName: String
+    lastName: String
+    phoneNumber: String
+    displayName: String
+}
+
+scalar UUID
+
+scalar Binary
+
+scalar Date
+
+scalar JSON

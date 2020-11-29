@@ -1,0 +1,37 @@
+{
+    "possibleTypes": {
+        "ShopProductBase": [
+            "ShopProductSummary",
+            "ShopProduct",
+            "ShopProductUpsellProduct",
+            "ShopProductCrossSellProduct",
+            "ShopProductBundleItemProduct"
+        ],
+        "ShopProductAttribute": [
+            "ShopProductAttributeStringValue",
+            "ShopProductAttributeBooleanValue",
+            "ShopProductAttributeIntValue",
+            "ShopProductAttributeFloatValue",
+            "ShopProductAttributeImageValue",
+            "ShopProductAttributeFileValue",
+            "ShopProductAttributeStringArrayValue",
+            "ShopProductAttributeImageArrayValue",
+            "ShopProductAttributeFileArrayValue"
+        ],
+        "ShopProductAttributeBase": [
+            "ShopProductAttributeStringValue",
+            "ShopProductAttributeBooleanValue",
+            "ShopProductAttributeIntValue",
+            "ShopProductAttributeFloatValue",
+            "ShopProductAttributeImageValue",
+            "ShopProductAttributeFileValue",
+            "ShopProductAttributeStringArrayValue",
+            "ShopProductAttributeImageArrayValue",
+            "ShopProductAttributeFileArrayValue"
+        ],
+        "ShopOfferShipping": [],
+        "ShopCartGiftcardItem": [],
+        "ShopOfferTax": [],
+        "PasswordlessChallengeResult": ["Credentials", "PasswordlessAuthChallenge"]
+    }
+}

@@ -1,0 +1,727 @@
+query ShopGetProductList($input: ShopGetProductsInput!) {
+    shopGetProducts(input: $input) {
+        page
+        count
+        products {
+            ...ShopProductForListView
+        }
+    }
+}
+
+query ShopGetProductBySlug($slug: String!) {
+    product: shopGetProductBySlug(slug: $slug) {
+        ...ShopProduct
+    }
+}
+
+fragment ShopProductForListView on ShopProductSummary {
+    id
+    name
+    slug
+    price
+    type
+    description
+    category
+    salePrice
+    onSale
+    tags
+    images {
+        height
+        width
+        url
+        id
+    }
+}
+
+#TODO find out why nested fragments fail here
+fragment ShopProduct on ShopProduct {
+    id
+    type
+    name
+    slug
+    category
+    description
+    images {
+        height
+        width
+        url
+        id
+    }
+    options {
+        price
+        inputType
+        placeholder
+        required
+        values {
+            description
+            name
+            id
+            price
+        }
+        description
+        name
+        id
+        parentId
+        parentValueIds
+    }
+    variantOptions {
+        values {
+            name
+            id
+        }
+        id
+        name
+    }
+    tags
+    attributes {
+        ... on ShopProductAttributeStringValue {
+            __typename
+            name
+            stringValue: value
+        }
+        ... on ShopProductAttributeBooleanValue {
+            __typename
+            name
+            booleanValue: value
+        }
+        ... on ShopProductAttributeIntValue {
+            __typename
+            name
+            intValue: value
+        }
+        ... on ShopProductAttributeFloatValue {
+            __typename
+            name
+            floatValue: value
+        }
+        ... on ShopProductAttributeImageValue {
+            __typename
+            name
+            imageValue: value {
+                id
+                url
+                width
+                height
+            }
+        }
+        ... on ShopProductAttributeFileValue {
+            __typename
+            name
+            fileValue: value {
+                id
+                filename
+                contentType
+                url
+            }
+        }
+        ... on ShopProductAttributeStringArrayValue {
+            __typename
+            name
+            stringArrayValue: value
+        }
+        ... on ShopProductAttributeImageArrayValue {
+            __typename
+            name
+            imageArrayValue: value {
+                height
+                width
+                url
+                id
+            }
+        }
+        ... on ShopProductAttributeFileArrayValue {
+            __typename
+            name
+            fileArrayValue: value {
+                url
+                contentType
+                filename
+                id
+            }
+        }
+    }
+    price
+    salePrice
+    stock
+    onSale
+    hidden
+    upsells {
+        product {
+            id
+            type
+            name
+            slug
+            category
+            description
+            images {
+                height
+                width
+                url
+                id
+            }
+            options {
+                price
+                inputType
+                placeholder
+                required
+                values {
+                    description
+                    name
+                    id
+                    price
+                }
+                description
+                name
+                id
+                parentId
+                parentValueIds
+            }
+            variantOptions {
+                values {
+                    name
+                    id
+                }
+                id
+                name
+            }
+            tags
+            attributes {
+                ... on ShopProductAttributeStringValue {
+                    __typename
+                    name
+                    stringValue: value
+                }
+                ... on ShopProductAttributeBooleanValue {
+                    __typename
+                    name
+                    booleanValue: value
+                }
+                ... on ShopProductAttributeIntValue {
+                    __typename
+                    name
+                    intValue: value
+                }
+                ... on ShopProductAttributeFloatValue {
+                    __typename
+                    name
+                    floatValue: value
+                }
+                ... on ShopProductAttributeImageValue {
+                    __typename
+                    name
+                    imageValue: value {
+                        id
+                        url
+                        width
+                        height
+                    }
+                }
+                ... on ShopProductAttributeFileValue {
+                    __typename
+                    name
+                    fileValue: value {
+                        id
+                        filename
+                        contentType
+                        url
+                    }
+                }
+                ... on ShopProductAttributeStringArrayValue {
+                    __typename
+                    name
+                    stringArrayValue: value
+                }
+                ... on ShopProductAttributeImageArrayValue {
+                    __typename
+                    name
+                    imageArrayValue: value {
+                        height
+                        width
+                        url
+                        id
+                    }
+                }
+                ... on ShopProductAttributeFileArrayValue {
+                    __typename
+                    name
+                    fileArrayValue: value {
+                        url
+                        contentType
+                        filename
+                        id
+                    }
+                }
+            }
+            price
+            salePrice
+            stock
+            onSale
+            hidden
+            crossSells {
+                discount_type
+                discount_amount
+                discount_percent
+                product {
+                    id
+                    type
+                    name
+                    slug
+                    category
+                    description
+                    images {
+                        height
+                        width
+                        url
+                        id
+                    }
+                    options {
+                        price
+                        inputType
+                        placeholder
+                        required
+                        values {
+                            description
+                            name
+                            id
+                            price
+                        }
+                        description
+                        name
+                        id
+                        parentId
+                        parentValueIds
+                    }
+                    variantOptions {
+                        values {
+                            name
+                            id
+                        }
+                        id
+                        name
+                    }
+                    tags
+                    attributes {
+                        ... on ShopProductAttributeStringValue {
+                            __typename
+                            name
+                            stringValue: value
+                        }
+                        ... on ShopProductAttributeBooleanValue {
+                            __typename
+                            name
+                            booleanValue: value
+                        }
+                        ... on ShopProductAttributeIntValue {
+                            __typename
+                            name
+                            intValue: value
+                        }
+                        ... on ShopProductAttributeFloatValue {
+                            __typename
+                            name
+                            floatValue: value
+                        }
+                        ... on ShopProductAttributeImageValue {
+                            __typename
+                            name
+                            imageValue: value {
+                                id
+                                url
+                                width
+                                height
+                            }
+                        }
+                        ... on ShopProductAttributeFileValue {
+                            __typename
+                            name
+                            fileValue: value {
+                                id
+                                filename
+                                contentType
+                                url
+                            }
+                        }
+                        ... on ShopProductAttributeStringArrayValue {
+                            __typename
+                            name
+                            stringArrayValue: value
+                        }
+                        ... on ShopProductAttributeImageArrayValue {
+                            __typename
+                            name
+                            imageArrayValue: value {
+                                height
+                                width
+                                url
+                                id
+                            }
+                        }
+                        ... on ShopProductAttributeFileArrayValue {
+                            __typename
+                            name
+                            fileArrayValue: value {
+                                url
+                                contentType
+                                filename
+                                id
+                            }
+                        }
+                    }
+                    price
+                    salePrice
+                    stock
+                    onSale
+                    hidden
+                }
+            }
+        }
+    }
+    crossSells {
+        discount_type
+        discount_amount
+        discount_percent
+        product {
+            id
+            type
+            name
+            slug
+            category
+            description
+            images {
+                height
+                width
+                url
+                id
+            }
+            options {
+                price
+                inputType
+                placeholder
+                required
+                values {
+                    description
+                    name
+                    id
+                    price
+                }
+                description
+                name
+                id
+                parentId
+                parentValueIds
+            }
+            variantOptions {
+                values {
+                    name
+                    id
+                }
+                id
+                name
+            }
+            tags
+            attributes {
+                ... on ShopProductAttributeStringValue {
+                    __typename
+                    name
+                    stringValue: value
+                }
+                ... on ShopProductAttributeBooleanValue {
+                    __typename
+                    name
+                    booleanValue: value
+                }
+                ... on ShopProductAttributeIntValue {
+                    __typename
+                    name
+                    intValue: value
+                }
+                ... on ShopProductAttributeFloatValue {
+                    __typename
+                    name
+                    floatValue: value
+                }
+                ... on ShopProductAttributeImageValue {
+                    __typename
+                    name
+                    imageValue: value {
+                        id
+                        url
+                        width
+                        height
+                    }
+                }
+                ... on ShopProductAttributeFileValue {
+                    __typename
+                    name
+                    fileValue: value {
+                        id
+                        filename
+                        contentType
+                        url
+                    }
+                }
+                ... on ShopProductAttributeStringArrayValue {
+                    __typename
+                    name
+                    stringArrayValue: value
+                }
+                ... on ShopProductAttributeImageArrayValue {
+                    __typename
+                    name
+                    imageArrayValue: value {
+                        height
+                        width
+                        url
+                        id
+                    }
+                }
+                ... on ShopProductAttributeFileArrayValue {
+                    __typename
+                    name
+                    fileArrayValue: value {
+                        url
+                        contentType
+                        filename
+                        id
+                    }
+                }
+            }
+            price
+            salePrice
+            stock
+            onSale
+            hidden
+        }
+    }
+    bundleItems {
+        id
+        productId
+        variantId
+        quantity
+        product {
+            id
+            type
+            name
+            slug
+            category
+            description
+            images {
+                height
+                width
+                url
+                id
+            }
+            options {
+                price
+                inputType
+                placeholder
+                required
+                values {
+                    description
+                    name
+                    id
+                    price
+                }
+                description
+                name
+                id
+                parentId
+                parentValueIds
+            }
+            variantOptions {
+                values {
+                    name
+                    id
+                }
+                id
+                name
+            }
+            tags
+            attributes {
+                ... on ShopProductAttributeStringValue {
+                    __typename
+                    name
+                    stringValue: value
+                }
+                ... on ShopProductAttributeBooleanValue {
+                    __typename
+                    name
+                    booleanValue: value
+                }
+                ... on ShopProductAttributeIntValue {
+                    __typename
+                    name
+                    intValue: value
+                }
+                ... on ShopProductAttributeFloatValue {
+                    __typename
+                    name
+                    floatValue: value
+                }
+                ... on ShopProductAttributeImageValue {
+                    __typename
+                    name
+                    imageValue: value {
+                        id
+                        url
+                        width
+                        height
+                    }
+                }
+                ... on ShopProductAttributeFileValue {
+                    __typename
+                    name
+                    fileValue: value {
+                        id
+                        filename
+                        contentType
+                        url
+                    }
+                }
+                ... on ShopProductAttributeStringArrayValue {
+                    __typename
+                    name
+                    stringArrayValue: value
+                }
+                ... on ShopProductAttributeImageArrayValue {
+                    __typename
+                    name
+                    imageArrayValue: value {
+                        height
+                        width
+                        url
+                        id
+                    }
+                }
+                ... on ShopProductAttributeFileArrayValue {
+                    __typename
+                    name
+                    fileArrayValue: value {
+                        url
+                        contentType
+                        filename
+                        id
+                    }
+                }
+            }
+            price
+            salePrice
+            stock
+            onSale
+            hidden
+        }
+    }
+}
+
+fragment ShopProductBase on ShopProductBase {
+    id
+    type
+    name
+    slug
+    category
+    description
+    images {
+        height
+        width
+        url
+        id
+    }
+    options {
+        price
+        inputType
+        placeholder
+        required
+        values {
+            description
+            name
+            id
+            price
+        }
+        description
+        name
+        id
+        parentId
+        parentValueIds
+    }
+    variantOptions {
+        values {
+            name
+            id
+        }
+        id
+        name
+    }
+    tags
+    attributes {
+        ... on ShopProductAttributeStringValue {
+            __typename
+            name
+            stringValue: value
+        }
+        ... on ShopProductAttributeBooleanValue {
+            __typename
+            name
+            booleanValue: value
+        }
+        ... on ShopProductAttributeIntValue {
+            __typename
+            name
+            intValue: value
+        }
+        ... on ShopProductAttributeFloatValue {
+            __typename
+            name
+            floatValue: value
+        }
+        ... on ShopProductAttributeImageValue {
+            __typename
+            name
+            imageValue: value {
+                id
+                url
+                width
+                height
+            }
+        }
+        ... on ShopProductAttributeFileValue {
+            __typename
+            name
+            fileValue: value {
+                id
+                filename
+                contentType
+                url
+            }
+        }
+        ... on ShopProductAttributeStringArrayValue {
+            __typename
+            name
+            stringArrayValue: value
+        }
+        ... on ShopProductAttributeImageArrayValue {
+            __typename
+            name
+            imageArrayValue: value {
+                height
+                width
+                url
+                id
+            }
+        }
+        ... on ShopProductAttributeFileArrayValue {
+            __typename
+            name
+            fileArrayValue: value {
+                url
+                contentType
+                filename
+                id
+            }
+        }
+    }
+    price
+    salePrice
+    stock
+    onSale
+    hidden
+}
